@@ -13,19 +13,25 @@ import {
 import { connect } from "react-redux";
 
 // Actions
-// import { login } from "./redux/actions";
+import { login, signup } from "../redux/actions";
 
 class LoginForm extends Component {
   state = {
     username: "",
     password: ""
   };
+
   handleChange = keyValue => {
+    // console.log("this is the object" + object);
     this.setState(keyValue);
   };
 
-  handleSubmit = () => {
-    alert("Check my code the states are empty");
+  handleSubmitLogin = event => {
+    this.props.login(this.state);
+  };
+
+  handleSubmitSignup = event => {
+    this.props.signup(this.state);
   };
 
   render() {
@@ -37,7 +43,14 @@ class LoginForm extends Component {
         <Content>
           <Form>
             <Item>
-              <Input name="username" value={username} placeholder="Username" />
+              <Input
+                name="username"
+                value={username}
+                placeholder="Username"
+                onChangeText={username =>
+                  this.handleChange({ username: username })
+                }
+              />
             </Item>
             <Item last>
               <Input
@@ -45,10 +58,16 @@ class LoginForm extends Component {
                 placeholder="Password"
                 secureTextEntry
                 name="password"
+                onChangeText={password =>
+                  this.handleChange({ password: password })
+                }
               />
             </Item>
-            <Button onPress={this.handleSubmit}>
+            <Button onPress={this.handleSubmitLogin}>
               <Text>Login</Text>
+            </Button>
+            <Button onPress={this.handleSubmitSignup}>
+              <Text>SignUp</Text>
             </Button>
           </Form>
         </Content>
@@ -56,4 +75,13 @@ class LoginForm extends Component {
     );
   }
 }
-export default LoginForm;
+const mapDispatchToProps = dispatch => {
+  return {
+    login: userData => dispatch(login(userData)),
+    signup: userData => dispatch(signup(userData))
+  };
+};
+export default connect(
+  null,
+  mapDispatchToProps
+)(LoginForm);
